@@ -1,2 +1,26 @@
 #!/bin/sh
+
+# Validate commit message format using commitlint
+# This ensures commits follow the Conventional Commits specification
+# Format: <type>[optional scope]: <description>
+# Examples:
+# - feat: add new feature
+# - fix: resolve bug
+# - docs: update readme
 npx --no -- commitlint --edit ${1}
+
+# - npx : Node.js 的包执行器，用于执行 node_modules 中的二进制文件
+# - --no : 禁用自动安装缺失的依赖包
+# - -- : 表示后面的参数都是传给 commitlint 的，而不是 npx 的
+# - commitlint : Git 提交信息校验工具
+# - --edit : 指定要检查的文件
+# - ${1} : Git 钩子传入的参数，代表临时存储提交信息的文件路径
+
+# 整体作用是：
+
+# 1. 读取 Git 提交时的临时文件（包含提交信息）
+# 2. 使用 commitlint 检查提交信息是否符合配置的规范
+# 3. 如果不符合规范，会阻止提交并显示错误信息
+# 例如，当你执行：git commit -m "添加新功能"
+# 这个钩子会拦截并报错，因为不符合规范。正确的格式应该是：
+# git commit -m "feat: 添加新功能"

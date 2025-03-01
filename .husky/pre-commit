@@ -1,4 +1,7 @@
 #!/bin/sh
+
+# Run lint-staged to check and fix only staged files
+# This will run ESLint and Prettier on staged files according to the configuration in package.json
 npx lint-staged
 
 
