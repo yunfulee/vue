@@ -50,9 +50,7 @@
   </div>
 </template>
 
-<script setup>
-import { NavBar, Cell, CellGroup, Image as VanImage, Grid, GridItem, Button } from 'vant'
-</script>
+<script setup></script>
 
 <style scoped>
 .profile {

@@ -52,17 +52,6 @@
  */
 
 import { ref, computed } from 'vue'
-import {
-  NavBar, // 导航栏组件
-  Card, // 商品卡片组件
-  Button,
-  SwipeCell,
-  Checkbox,
-  CheckboxGroup,
-  Stepper,
-  SubmitBar,
-  Empty
-} from 'vant'
 
 const cartItems = ref([
   {

@@ -13,9 +13,9 @@
       </div>
 
       <!-- 轮播广告 -->
-      <van-swipe class="banner" :autoplay="3000" indicator-color="#ff6b81">
+      <van-swipe class="banner" :autoplay="3000" indicator-color="#ff6b81" lazy-render>
         <van-swipe-item v-for="(banner, index) in banners" :key="index">
-          <img :src="banner.image" :alt="banner.title" class="banner-img" />
+          <img v-lazy="banner.image" :alt="banner.title" class="banner-img" />
         </van-swipe-item>
       </van-swipe>
 
@@ -44,7 +44,11 @@
               <h4>女人节惊喜满</h4>
               <p>领合计最高330元补贴</p>
             </div>
-            <img src="https://img01.yzcdn.cn/vant/cat.jpeg" alt="女人节活动" class="promo-image" />
+            <img
+              v-lazy="'https://img01.yzcdn.cn/vant/cat.jpeg'"
+              alt="女人节活动"
+              class="promo-image"
+            />
           </div>
         </div>
 
@@ -68,7 +72,7 @@
       <div class="brand-container">
         <van-grid :column-num="5" :border="true">
           <van-grid-item v-for="(brand, index) in brands" :key="index">
-            <img :src="brand.logo" :alt="brand.name" class="brand-logo" />
+            <img v-lazy="brand.logo" :alt="brand.name" class="brand-logo" />
           </van-grid-item>
         </van-grid>
       </div>
@@ -80,16 +84,16 @@
       <div class="brand-showcase">
         <div class="brand-row">
           <div class="brand-header">
-            <img src="https://img01.yzcdn.cn/vant/cat.jpeg" alt="Clarks" />
-            <img src="https://img01.yzcdn.cn/vant/cat.jpeg" alt="Camper" />
-            <img src="https://img01.yzcdn.cn/vant/cat.jpeg" alt="Hugo Boss" />
+            <img v-lazy="'https://img01.yzcdn.cn/vant/cat.jpeg'" alt="Clarks" />
+            <img v-lazy="'https://img01.yzcdn.cn/vant/cat.jpeg'" alt="Camper" />
+            <img v-lazy="'https://img01.yzcdn.cn/vant/cat.jpeg'" alt="Hugo Boss" />
           </div>
           <div class="brand-title">潮流运动鞋 轻享春日</div>
         </div>
         <div class="brand-grid">
           <van-grid :column-num="4" :border="false" :gutter="10">
             <van-grid-item v-for="brand in popularBrands" :key="brand.id">
-              <img :src="brand.logo" :alt="brand.name" class="brand-logo" />
+              <img v-lazy="brand.logo" :alt="brand.name" class="brand-logo" />
             </van-grid-item>
           </van-grid>
         </div>
@@ -117,7 +121,6 @@
 
 <script setup>
 import { ref } from 'vue'
-import { showToast, PullRefresh } from 'vant' // 添加 PullRefresh 导入
 import ProductRecommend from '@/components/ProductRecommend.vue'
 // 搜索关键词
 const searchValue = ref('')

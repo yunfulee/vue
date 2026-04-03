@@ -5,7 +5,6 @@
  */
 
 import { ref } from 'vue'
-import { Tabbar, TabbarItem } from 'vant'
 
 // 当前激活的标签页索引
 const active = ref(0)

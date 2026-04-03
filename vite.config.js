@@ -3,6 +3,9 @@ import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import eslint from 'vite-plugin-eslint'
 
+import Components from 'unplugin-vue-components/vite'
+import { VantResolver } from 'unplugin-vue-components/resolvers'
+
 // Vite 配置文件
 export default defineConfig({
   // 开发或生产环境服务的公共基础路径
@@ -10,6 +13,9 @@ export default defineConfig({
   // 插件配置
   plugins: [
     vue(),
+    Components({
+      resolvers: [VantResolver()]
+    }),
     eslint({
       cache: false,
       include: ['src/**/*.vue', 'src/**/*.js'],

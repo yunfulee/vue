@@ -43,12 +43,6 @@
  */
 
 import { ref, computed } from 'vue'
-import {
-  TreeSelect, // 树形选择组件
-  Card, // 商品卡片组件
-  Button, // 按钮组件
-  NavBar // 导航栏组件
-} from 'vant'
 
 // 当前选中的商品分类ID
 const activeId = ref(1)
