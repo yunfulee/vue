@@ -29,7 +29,9 @@ import {
   Stepper,
   SubmitBar,
   Empty,
-  Divider
+  Divider,
+  Tab,
+  Tabs
 } from 'vant'
 
 // 导入Vant的样式文件
@@ -62,6 +64,8 @@ app
   .use(SubmitBar) // 提交订单栏组件
   .use(Empty) // 空状态组件
   .use(Divider) // 分割线组件
+  .use(Tab)
+  .use(Tabs)
 
 // 注册路由插件
 app.use(router)
