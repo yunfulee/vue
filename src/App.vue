@@ -26,32 +26,24 @@ const active = ref(0)
   </div>
 </template>
 
-<style>
+<style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Montserrat:wght@400;700&display=swap');
+
 /* 全局样式 */
 #app {
   /* 设置全局字体族 */
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    'Helvetica Neue',
-    Helvetica,
-    Segoe UI,
-    Arial,
-    Roboto,
-    'PingFang SC',
-    'miui',
-    'Hiragino Sans GB',
-    'Microsoft Yahei',
-    sans-serif;
+  font-family: $font-family-sans;
   /* 字体渲染优化 */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: $text-color;
+  background-color: $background-color;
 }
 
 /* 应用容器样式 */
 .app {
   min-height: 100vh;
-  background-color: #f7f8fa;
+  background-color: $background-color;
 }
 
 /* 确保底部导航栏始终显示在最上层 */

@@ -1,0 +1,32 @@
+// UI-UX-PRO-MAX (v2.0) Design System Variables
+
+// Colors - Soft UI Evolution
+$primary-color: #E8B4B8;    // Soft Pink
+$secondary-color: #A8D5BA;  // Sage Green
+$cta-color: #D4AF37;        // Gold
+$background-color: #FFF5F5; // Warm White
+$text-color: #2D3436;       // Charcoal
+
+// Typography
+$font-family-serif: 'Cormorant Garamond', serif;
+$font-family-sans: 'Montserrat', sans-serif;
+
+// Shadows & Effects
+$soft-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+$hover-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+$border-radius-organic: 24px;
+
+// Transitions
+$transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+// Vant Component Theme Overrides (CSS Variables)
+:root {
+  --van-primary-color: #{$primary-color};
+  --van-success-color: #{$secondary-color};
+  --van-background: #{$background-color};
+  --van-text-color: #{$text-color};
+  --van-border-radius-md: 12px;
+  --van-border-radius-lg: 20px;
+  --van-button-default-background: #fff;
+  --van-tabs-bottom-bar-color: #{$primary-color};
+}

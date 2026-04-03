@@ -1,6 +1,6 @@
 <template>
   <div class="product-recommend">
-    <van-tabs v-model:active="activeTab" animated swipeable sticky>
+    <van-tabs v-model:active="activeTab" animated swipeable sticky offset-top="64">
       <van-tab v-for="tab in tabs" :key="tab.id" :title="tab.title">
         <div class="products">
           <van-card
@@ -11,24 +11,20 @@
             :thumb="product.thumb"
             :tag="product.tag"
             :desc="product.desc"
+            class="recommend-card"
           >
             <template #footer>
-              <van-button size="mini">加入购物车</van-button>
-              <van-button size="mini" type="primary">立即购买</van-button>
+              <div class="card-footer">
+                <van-button size="mini" round plain>加入购物车</van-button>
+                <van-button size="mini" round type="primary">立即购买</van-button>
+              </div>
             </template>
           </van-card>
 
           <!-- 查看更多按钮 -->
           <div class="view-more">
-            <van-button
-              block
-              plain
-              hairline
-              type="primary"
-              color="#ff6b81"
-              @click="handleViewMore(tab.id)"
-            >
-              查看更多
+            <van-button block round plain hairline type="primary" @click="handleViewMore(tab.id)">
+              浏览更多精品
             </van-button>
           </div>
         </div>
@@ -49,7 +45,7 @@ const handleViewMore = (tabId) => {
   router.push(`/category/${tabId}`)
 }
 
-// Tab数据保持不变
+// Tab数据
 const tabs = ref([
   { id: 'hot', title: '今日特惠' },
   { id: 'clothing', title: '服装鞋靴' },
@@ -57,7 +53,7 @@ const tabs = ref([
   { id: 'beauty', title: '美妆个护' }
 ])
 
-// 扩展商品数据
+// 商品数据
 const products = ref({
   hot: [
     {
@@ -66,7 +62,7 @@ const products = ref({
       desc: '限时特惠',
       price: '480.52',
       tag: '限时',
-      thumb: 'https://via.placeholder.com/150'
+      thumb: 'https://picsum.photos/200'
     },
     {
       id: 2,
@@ -138,40 +134,79 @@ const getProductsByTab = (tabId) => {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .product-recommend {
-  margin-bottom: 50px;
+  margin-bottom: 24px;
 }
 
 .products {
-  padding: 10px;
+  padding: 12px;
 }
 
-.van-card {
-  margin-bottom: 10px;
+.recommend-card {
+  margin-bottom: 16px;
   background-color: white;
+  border-radius: 20px;
+  padding: 12px;
+  box-shadow: $soft-shadow;
+  transition: $transition-smooth;
+
+  &:hover {
+    box-shadow: $hover-shadow;
+    transform: translateY(-2px);
+  }
+
+  :deep(.van-card__title) {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  :deep(.van-card__price) {
+    color: $cta-color;
+    font-weight: 700;
+  }
+}
+
+.card-footer {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 8px;
 }
 
 :deep(.van-tabs__wrap) {
-  background-color: white;
+  background-color: transparent;
+  padding: 0 12px;
+}
+
+:deep(.van-tabs__nav) {
+  background-color: transparent;
+}
+
+:deep(.van-tab) {
+  font-size: 14px;
+  color: #999;
 }
 
 :deep(.van-tab--active) {
-  color: #ff6b81;
-  font-weight: bold;
+  color: $text-color;
+  font-weight: 700;
+  font-family: $font-family-serif;
 }
 
 :deep(.van-tabs__line) {
-  background-color: #ff6b81;
+  background-color: $primary-color;
+  width: 20px;
 }
 
 .view-more {
-  padding: 16px;
+  padding: 16px 0;
   text-align: center;
-}
 
-:deep(.van-button--plain) {
-  border-color: #ff6b81;
-  color: #ff6b81;
+  :deep(.van-button) {
+    font-weight: 600;
+    box-shadow: $soft-shadow;
+  }
 }
 </style>

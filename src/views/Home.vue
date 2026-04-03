@@ -6,20 +6,41 @@
     @refresh="onRefresh"
   >
     <div class="home">
-      <!-- 顶部搜索栏 -->
+      <!-- 顶部搜索栏 - Soft UI Style -->
       <div class="search-bar">
         <div class="logo">亚马逊海外购</div>
-        <van-search v-model="searchValue" placeholder="搜索" shape="round" />
+        <van-search
+          v-model="searchValue"
+          placeholder="搜索全球好物"
+          shape="round"
+          background="transparent"
+        />
       </div>
 
-      <!-- 轮播广告 -->
-      <van-swipe class="banner" :autoplay="3000" indicator-color="#ff6b81" lazy-render>
+      <!-- 轮播广告 - Hero-Centric -->
+      <van-swipe class="banner" :autoplay="3000" indicator-color="#D4AF37" lazy-render>
         <van-swipe-item v-for="(banner, index) in banners" :key="index">
-          <img v-lazy="banner.image" :alt="banner.title" class="banner-img" />
+          <div class="banner-item">
+            <img v-lazy="banner.image" :alt="banner.title" class="banner-img" />
+            <div class="banner-content">
+              <h3>{{ banner.title }}</h3>
+              <p>限时尊享优惠</p>
+            </div>
+          </div>
         </van-swipe-item>
       </van-swipe>
 
-      <!-- 分类导航 -->
+      <!-- Social Proof Section -->
+      <div class="social-proof">
+        <van-icon name="passed" color="#A8D5BA" />
+        <span>100% 正品保障</span>
+        <van-icon name="logistics" color="#A8D5BA" />
+        <span>全球直邮免邮</span>
+        <van-icon name="service-o" color="#A8D5BA" />
+        <span>24/7 专业客服</span>
+      </div>
+
+      <!-- 分类导航 - Organic Shapes -->
       <van-grid :column-num="5" :border="false" class="category-grid">
         <van-grid-item
           v-for="(category, index) in categories"
@@ -29,80 +50,67 @@
         />
       </van-grid>
 
-      <!-- 优惠券提示 -->
+      <!-- 优惠券提示 - Soft UI -->
       <div class="coupon-bar">
         <van-icon name="coupon-o" />
-        <span>超值好券来袭!</span>
+        <span>尊享会员礼包，最高立减 330 元</span>
         <van-icon name="arrow" />
       </div>
 
-      <!-- 促销活动区 -->
+      <!-- 促销活动区 - Modern Layout -->
       <div class="promo-container">
         <div class="promo-left">
-          <div class="promo-card">
+          <div class="promo-card primary">
             <div class="promo-content">
-              <h4>女人节惊喜满</h4>
-              <p>领合计最高330元补贴</p>
+              <h4>春日焕新季</h4>
+              <p>精选大牌 3 折起</p>
+              <van-button size="mini" round plain color="#fff">立即进入</van-button>
             </div>
-            <img
-              v-lazy="'https://img01.yzcdn.cn/vant/cat.jpeg'"
-              alt="女人节活动"
-              class="promo-image"
-            />
+            <img v-lazy="'https://img01.yzcdn.cn/vant/cat.jpeg'" alt="活动" class="promo-image" />
           </div>
         </div>
 
         <div class="promo-right">
-          <div class="promo-card small">
+          <div class="promo-card secondary">
             <div class="promo-content">
-              <h4>扭蛋三天乐</h4>
-              <p>中奖直降200元</p>
+              <h4>扭蛋赢好礼</h4>
+              <p>100% 中奖</p>
             </div>
           </div>
-          <div class="promo-card small">
+          <div class="promo-card tertiary">
             <div class="promo-content">
-              <h4>小红书分享</h4>
-              <p>得大额券</p>
+              <h4>分享领券</h4>
+              <p>多邀多得</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 品牌展示 -->
+      <!-- 品牌展示 - Grid Layout -->
+      <div class="section-header">
+        <span class="title">大牌入驻</span>
+        <span class="more">查看全部 ></span>
+      </div>
       <div class="brand-container">
-        <van-grid :column-num="5" :border="true">
+        <van-grid :column-num="5" :border="false">
           <van-grid-item v-for="(brand, index) in brands" :key="index">
-            <img v-lazy="brand.logo" :alt="brand.name" class="brand-logo" />
+            <div class="brand-item">
+              <img v-lazy="brand.logo" :alt="brand.name" class="brand-logo" />
+            </div>
           </van-grid-item>
         </van-grid>
       </div>
 
-      <!-- 商品推荐 -->
+      <!-- 商品推荐 - Card Style -->
+      <div class="section-header">
+        <span class="title">为您推荐</span>
+      </div>
       <product-recommend />
 
-      <!-- 品牌展示区 -->
-      <div class="brand-showcase">
-        <div class="brand-row">
-          <div class="brand-header">
-            <img v-lazy="'https://img01.yzcdn.cn/vant/cat.jpeg'" alt="Clarks" />
-            <img v-lazy="'https://img01.yzcdn.cn/vant/cat.jpeg'" alt="Camper" />
-            <img v-lazy="'https://img01.yzcdn.cn/vant/cat.jpeg'" alt="Hugo Boss" />
-          </div>
-          <div class="brand-title">潮流运动鞋 轻享春日</div>
-        </div>
-        <div class="brand-grid">
-          <van-grid :column-num="4" :border="false" :gutter="10">
-            <van-grid-item v-for="brand in popularBrands" :key="brand.id">
-              <img v-lazy="brand.logo" :alt="brand.name" class="brand-logo" />
-            </van-grid-item>
-          </van-grid>
-        </div>
-      </div>
-
-      <!-- 海淘热卖榜 -->
+      <!-- 海淘热卖榜 - Detailed Cards -->
       <div class="hot-sales">
         <div class="section-title">海淘热卖必买榜</div>
-        <div class="section-subtitle">满300元享国际免邮</div>
+        <div class="section-subtitle">满 300 元享国际免邮</div>
         <div class="hot-sales-grid">
           <van-card
             v-for="item in hotSaleProducts"
@@ -112,7 +120,13 @@
             :thumb="item.thumb"
             :desc="item.desc"
             :tag="item.tag"
-          />
+            currency="¥"
+            class="product-card"
+          >
+            <template #footer>
+              <van-button size="mini" round icon="cart-o"></van-button>
+            </template>
+          </van-card>
         </div>
       </div>
     </div>
@@ -121,7 +135,9 @@
 
 <script setup>
 import { ref } from 'vue'
+import { showToast } from 'vant'
 import ProductRecommend from '@/components/ProductRecommend.vue'
+
 // 搜索关键词
 const searchValue = ref('')
 
@@ -130,17 +146,17 @@ const banners = ref([
   {
     id: 1,
     image: 'https://img01.yzcdn.cn/vant/apple-1.jpg',
-    title: '发小红书必得大额券'
+    title: '春季大促，全球好物低至 3 折'
   },
   {
     id: 2,
     image: 'https://img01.yzcdn.cn/vant/apple-2.jpg',
-    title: '女人节活动'
+    title: '三八女王节，尽显女性风采'
   },
   {
     id: 3,
     image: 'https://img01.yzcdn.cn/vant/apple-3.jpg',
-    title: '春季新品'
+    title: '品质生活，从这里开始'
   }
 ])
 
@@ -172,7 +188,15 @@ const brands = ref([
   { id: 10, name: 'Hansgrohe', logo: 'https://img01.yzcdn.cn/vant/logo.png' }
 ])
 
-// 添加热卖商品数据
+// 热门品牌数据
+const popularBrands = ref([
+  { id: 1, name: 'Clarks', logo: 'https://img01.yzcdn.cn/vant/cat.jpeg' },
+  { id: 2, name: 'Camper', logo: 'https://img01.yzcdn.cn/vant/cat.jpeg' },
+  { id: 3, name: 'BOSS', logo: 'https://img01.yzcdn.cn/vant/cat.jpeg' },
+  { id: 4, name: 'ECCO', logo: 'https://img01.yzcdn.cn/vant/cat.jpeg' }
+])
+
+// 热卖商品数据
 const hotSaleProducts = ref([
   {
     id: 'hs1',
@@ -208,49 +232,19 @@ const hotSaleProducts = ref([
   }
 ])
 
-// 添加下拉刷新相关的数据和方法
-// 修改下拉刷新相关的实现
 const refreshing = ref(false)
 
 const onRefresh = () => {
   refreshing.value = true
-  // 模拟数据刷新
   setTimeout(async () => {
     try {
-      // 更新轮播图数据
       banners.value = [
         ...banners.value,
-        {
-          id: 4,
-          image: 'https://img01.yzcdn.cn/vant/apple-4.jpg',
-          title: '限时特惠'
-        }
+        { id: Date.now(), image: 'https://img01.yzcdn.cn/vant/apple-4.jpg', title: '会员尊享日' }
       ]
-
-      // 更新热卖商品数据
-      hotSaleProducts.value = [
-        ...hotSaleProducts.value,
-        {
-          id: 'hs5',
-          title: 'Dyson 吹风机',
-          desc: '新款上市',
-          price: '2999.00',
-          tag: '新品',
-          thumb: 'https://img01.yzcdn.cn/vant/cat.jpeg'
-        }
-      ]
-
-      showToast({
-        type: 'success',
-        message: '刷新成功',
-        position: 'top'
-      })
+      showToast({ type: 'success', message: '内容已更新' })
     } catch (error) {
-      showToast({
-        type: 'fail',
-        message: '刷新失败',
-        position: 'top'
-      })
+      showToast({ type: 'fail', message: '网络异常' })
     } finally {
       refreshing.value = false
     }
@@ -258,216 +252,290 @@ const onRefresh = () => {
 }
 </script>
 
-<style scoped>
-:deep(.van-pull-refresh) {
+<style lang="scss" scoped>
+.home {
+  padding-bottom: 60px;
+  background-color: $background-color;
   min-height: 100vh;
-  background-color: #f7f8fa;
-  overflow: visible;
-}
-
-:deep(.van-pull-refresh__track) {
-  position: relative;
-}
-
-:deep(.van-pull-refresh__head) {
-  position: absolute;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #ff6b81;
-  color: white;
-  font-size: 14px;
-  transition: all 0.3s;
-}
-
-.home {
-  transition: transform 0.3s;
-  transform-origin: top;
-  will-change: transform;
-}
-
-.home {
-  padding-bottom: 50px;
-  background-color: #f7f8fa;
 }
 
 .search-bar {
   display: flex;
   align-items: center;
-  padding: 8px 12px;
-  background-color: #ff6b81;
-}
+  padding: 12px 16px;
+  background-color: $primary-color;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: $soft-shadow;
 
-.logo {
-  color: white;
-  font-weight: bold;
-  margin-right: 10px;
-  font-size: 14px;
+  .logo {
+    color: white;
+    font-family: $font-family-serif;
+    font-weight: 700;
+    font-size: 16px;
+    margin-right: 12px;
+    white-space: nowrap;
+  }
+
+  :deep(.van-search) {
+    flex: 1;
+    padding: 0;
+    .van-search__content {
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      .van-field__control {
+        color: white;
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.7);
+        }
+      }
+      .van-icon {
+        color: white;
+      }
+    }
+  }
 }
 
 .banner {
-  height: 180px;
+  height: 220px;
+  margin: 12px;
+  border-radius: $border-radius-organic;
+  overflow: hidden;
+  box-shadow: $soft-shadow;
+
+  .banner-item {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    .banner-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .banner-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 20px;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+      color: white;
+
+      h3 {
+        margin: 0;
+        font-size: 18px;
+        font-family: $font-family-serif;
+      }
+      p {
+        margin: 4px 0 0;
+        font-size: 12px;
+        opacity: 0.8;
+      }
+    }
+  }
 }
 
-.banner-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.social-proof {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 12px;
+  background-color: white;
+  margin: 0 12px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  color: #666;
+  box-shadow: $soft-shadow;
+
+  span {
+    margin-left: 4px;
+  }
 }
 
 .category-grid {
-  margin: 10px 0;
+  margin: 0 12px 12px;
   background-color: white;
+  border-radius: $border-radius-organic;
+  overflow: hidden;
+  box-shadow: $soft-shadow;
+
+  :deep(.van-grid-item__content) {
+    background: transparent;
+    padding: 16px 8px;
+    transition: $transition-smooth;
+    &:active {
+      background: rgba(0, 0, 0, 0.02);
+    }
+  }
 }
 
 .coupon-bar {
   display: flex;
   align-items: center;
-  padding: 8px 12px;
-  background-color: #fff5f5;
-  color: #ff6b81;
-  margin: 0 10px;
-  border-radius: 4px;
+  padding: 14px 16px;
+  background-color: #fff;
+  color: $primary-color;
+  margin: 0 12px 16px;
+  border-radius: 16px;
+  box-shadow: $soft-shadow;
+  font-size: 13px;
+  font-weight: 500;
+
+  span {
+    flex: 1;
+    margin: 0 10px;
+  }
 }
 
 .promo-container {
   display: flex;
-  padding: 10px;
-  gap: 10px;
+  padding: 0 12px;
+  gap: 12px;
+  margin-bottom: 24px;
+
+  .promo-card {
+    background-color: white;
+    border-radius: 20px;
+    padding: 16px;
+    box-shadow: $soft-shadow;
+    transition: $transition-smooth;
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: $hover-shadow;
+      transform: translateY(-2px);
+    }
+
+    &.primary {
+      background: linear-gradient(135deg, $primary-color, #f3d1d4);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      .promo-image {
+        width: 100px;
+        align-self: flex-end;
+      }
+    }
+
+    &.secondary {
+      background-color: #f8e9e9;
+      color: $text-color;
+    }
+    &.tertiary {
+      background-color: #e9f8ed;
+      color: $text-color;
+    }
+
+    h4 {
+      margin: 0;
+      font-size: 16px;
+    }
+    p {
+      margin: 4px 0 8px;
+      font-size: 12px;
+      opacity: 0.8;
+    }
+  }
+
+  .promo-left {
+    flex: 1.2;
+  }
+  .promo-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 }
 
-.promo-left {
-  flex: 2;
-}
-
-.promo-right {
-  flex: 1;
+.section-header {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.promo-card {
-  background-color: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 12px;
-  height: 100%;
-}
+  align-items: baseline;
+  padding: 0 20px 12px;
 
-.promo-image {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 4px;
-  margin-left: 12px;
-  flex-shrink: 0;
-}
-
-.promo-content {
-  flex: 1;
-  min-width: 0; /* 防止文字溢出 */
-}
-
-.promo-left .promo-card {
-  background-color: #ff6b81;
-  color: white;
-}
-
-.promo-content h4 {
-  margin: 0;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.promo-content p {
-  margin: 5px 0 0;
-  font-size: 12px;
+  .title {
+    font-size: 18px;
+    font-weight: 700;
+    font-family: $font-family-serif;
+    color: $text-color;
+  }
+  .more {
+    font-size: 12px;
+    color: #999;
+  }
 }
 
 .brand-container {
-  margin: 10px 0;
-}
-
-.brand-logo {
-  width: 80%;
-  height: auto;
-}
-
-.product-recommend {
-  margin-bottom: 50px;
-}
-
-.products {
-  padding: 10px;
-}
-
-.van-card {
-  margin-bottom: 10px;
-  background-color: white;
-}
-
-:deep(.van-tabs__wrap) {
-  background-color: white;
-}
-
-:deep(.van-tab--active) {
-  color: #ff6b81;
-  font-weight: bold;
-}
-
-:deep(.van-tabs__line) {
-  background-color: #ff6b81;
-}
-
-.brand-showcase {
-  margin: 16px;
+  margin: 0 12px 24px;
   background: white;
-  border-radius: 8px;
-  padding: 16px;
-}
-
-.brand-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.brand-header img {
-  width: 30%;
-  height: 40px;
-  object-fit: contain;
-}
-
-.brand-title {
-  font-size: 14px;
-  color: #333;
-  text-align: center;
-  margin-bottom: 16px;
-}
-
-.brand-grid {
-  margin-top: 16px;
-}
-
-.brand-logo {
-  width: 100%;
-  height: 40px;
-  object-fit: contain;
-}
-
-:deep(.van-grid-item__content) {
+  border-radius: $border-radius-organic;
   padding: 8px;
-  background-color: #f8f8f8;
-  border-radius: 4px;
+  box-shadow: $soft-shadow;
+
+  .brand-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 40px;
+    .brand-logo {
+      max-width: 80%;
+      max-height: 80%;
+      object-fit: contain;
+      filter: grayscale(100%);
+      opacity: 0.6;
+      transition: $transition-smooth;
+      &:hover {
+        filter: grayscale(0);
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.hot-sales {
+  padding: 0 12px 24px;
+
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    font-family: $font-family-serif;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .section-subtitle {
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .product-card {
+    background-color: white;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    padding: 12px;
+    box-shadow: $soft-shadow;
+    transition: $transition-smooth;
+
+    &:hover {
+      box-shadow: $hover-shadow;
+    }
+
+    :deep(.van-card__title) {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    :deep(.van-card__price) {
+      color: $cta-color;
+      font-weight: 700;
+    }
+  }
 }
 </style>
