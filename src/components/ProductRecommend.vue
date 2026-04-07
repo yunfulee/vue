@@ -1,49 +1,58 @@
 <template>
   <div class="product-recommend">
-    <van-tabs v-model:active="activeTab" animated swipeable sticky offset-top="64">
-      <van-tab v-for="tab in tabs" :key="tab.id" :title="tab.title">
+    <van-tabs
+      v-model:active="activeTab"
+      animated
+      swipeable
+      sticky
+      offset-top="64"
+      @change="onTabChange"
+    >
+      <van-tab v-for="tab in tabs" :key="tab.id" :title="tab.title" :name="tab.id">
         <div class="products">
-          <van-card
-            v-for="product in getProductsByTab(tab.id)"
-            :key="product.id"
-            :price="product.price"
-            :title="product.title"
-            :thumb="product.thumb"
-            :tag="product.tag"
-            :desc="product.desc"
-            class="recommend-card"
-          >
-            <template #footer>
-              <div class="card-footer">
-                <van-button size="mini" round plain>加入购物车</van-button>
-                <van-button size="mini" round type="primary">立即购买</van-button>
-              </div>
-            </template>
-          </van-card>
+          <van-loading v-if="loading" vertical>加载中...</van-loading>
+          <template v-else>
+            <van-card
+              v-for="product in currentProducts"
+              :key="product.id"
+              :price="product.price"
+              :title="product.title"
+              :thumb="product.thumb"
+              :tag="product.tag"
+              :desc="product.desc"
+              class="recommend-card"
+            >
+              <template #footer>
+                <div class="card-footer">
+                  <van-button size="mini" round plain>加入购物车</van-button>
+                  <van-button size="mini" round type="primary">立即购买</van-button>
+                </div>
+              </template>
+            </van-card>
 
-          <!-- 查看更多按钮 -->
-          <div class="view-more">
-            <van-button block round plain hairline type="primary" @click="handleViewMore(tab.id)">
-              浏览更多精品
-            </van-button>
-          </div>
+            <!-- 查看更多按钮 -->
+            <div class="view-more">
+              <van-button block round plain hairline type="primary" @click="handleViewMore(tab.id)">
+                浏览更多精品
+              </van-button>
+            </div>
+          </template>
         </div>
       </van-tab>
     </van-tabs>
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { getRecommendProducts } from '@/services/productService'
+import type { Product } from '@/types'
 
 const router = useRouter()
-const activeTab = ref(0)
-
-// 处理查看更多点击事件
-const handleViewMore = (tabId) => {
-  router.push(`/category/${tabId}`)
-}
+const activeTab = ref('hot')
+const currentProducts = ref<Product[]>([])
+const loading = ref(false)
 
 // Tab数据
 const tabs = ref([
@@ -53,84 +62,28 @@ const tabs = ref([
   { id: 'beauty', title: '美妆个护' }
 ])
 
-// 商品数据
-const products = ref({
-  hot: [
-    {
-      id: 1,
-      title: '3.8大口径镜头，耳机音箱，运动手表等精品促销',
-      desc: '限时特惠',
-      price: '480.52',
-      tag: '限时',
-      thumb: 'https://picsum.photos/200'
-    },
-    {
-      id: 2,
-      title: '三八女王价保健品特惠购好价',
-      desc: '女王节特惠',
-      price: '141.38',
-      tag: '特惠',
-      thumb: 'https://img01.yzcdn.cn/vant/cat.jpeg'
-    }
-  ],
-  clothing: [
-    {
-      id: 101,
-      title: 'BOSS 男士衬衫',
-      desc: '高品质面料，舒适透气',
-      price: '599.00',
-      tag: '新品',
-      thumb: 'https://img01.yzcdn.cn/vant/cat.jpeg'
-    },
-    {
-      id: 102,
-      title: 'ECCO 女士休闲鞋',
-      desc: '轻盈舒适，百搭款式',
-      price: '899.00',
-      tag: '热销',
-      thumb: 'https://img01.yzcdn.cn/vant/cat.jpeg'
-    }
-  ],
-  electronics: [
-    {
-      id: 201,
-      title: '智能音箱家庭套装',
-      desc: 'AI语音控制，高品质音质',
-      price: '599.00',
-      tag: '智能',
-      thumb: 'https://img01.yzcdn.cn/vant/cat.jpeg'
-    },
-    {
-      id: 202,
-      title: 'Fissler 多功能料理锅',
-      desc: '德国品质，耐用持久',
-      price: '1299.00',
-      tag: '进口',
-      thumb: 'https://img01.yzcdn.cn/vant/cat.jpeg'
-    }
-  ],
-  beauty: [
-    {
-      id: 301,
-      title: 'Cetaphil 洁面乳',
-      desc: '温和不刺激，适合敏感肌',
-      price: '89.00',
-      tag: '畅销',
-      thumb: 'https://img01.yzcdn.cn/vant/cat.jpeg'
-    },
-    {
-      id: 302,
-      title: "Silk'n 美容仪",
-      desc: '专业级家用美容，紧致肌肤',
-      price: '1680.00',
-      tag: '高端',
-      thumb: 'https://img01.yzcdn.cn/vant/cat.jpeg'
-    }
-  ]
+const fetchProducts = async (tabId: string) => {
+  loading.value = true
+  try {
+    currentProducts.value = await getRecommendProducts(tabId)
+  } catch (error) {
+    console.error('Failed to fetch products:', error)
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  fetchProducts(activeTab.value)
 })
 
-const getProductsByTab = (tabId) => {
-  return products.value[tabId] || []
+const onTabChange = (name: string | number) => {
+  fetchProducts(String(name))
+}
+
+// 处理查看更多点击事件
+const handleViewMore = (tabId: string | number) => {
+  router.push(`/category/${tabId}`)
 }
 </script>
 
@@ -141,6 +94,7 @@ const getProductsByTab = (tabId) => {
 
 .products {
   padding: 12px;
+  min-height: 200px;
 }
 
 .recommend-card {

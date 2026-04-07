@@ -31,7 +31,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 /**
  * Category.vue - 商品分类页面组件
  *
@@ -44,12 +44,26 @@
 
 import { ref, computed } from 'vue'
 
+interface Product {
+  id: number
+  title: string
+  desc: string
+  price: string
+  thumb: string
+}
+
+interface CategoryItem {
+  text: string
+  id?: number
+  children?: { text: string; id: number }[]
+}
+
 // 当前选中的商品分类ID
 const activeId = ref(1)
 // 当前选中的一级分类索引
 const activeIndex = ref(0)
 
-const items = ref([
+const items = ref<CategoryItem[]>([
   {
     text: '手机数码',
     children: [
@@ -76,7 +90,7 @@ const items = ref([
   }
 ])
 
-const products = ref({
+const products = ref<Record<number, Product[]>>({
   1: [
     {
       id: 1,
@@ -101,7 +115,7 @@ const selectedProducts = computed(() => {
   return products.value[activeId.value] || []
 })
 
-const onClickItem = async (item) => {
+const onClickItem = async (item: { id: number }) => {
   try {
     activeId.value = item.id
     // 这里可以添加商品数据加载逻辑
@@ -114,7 +128,7 @@ const onClickItem = async (item) => {
   }
 }
 
-const onClickNav = (index) => {
+const onClickNav = (index: number) => {
   activeIndex.value = index
 }
 </script>

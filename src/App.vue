@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 /**
  * App.vue - 应用程序根组件
  * 实现整体布局和底部导航栏

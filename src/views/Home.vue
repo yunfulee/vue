@@ -19,7 +19,7 @@
 
       <!-- 轮播广告 - Hero-Centric -->
       <van-swipe class="banner" :autoplay="3000" indicator-color="#D4AF37" lazy-render>
-        <van-swipe-item v-for="(banner, index) in banners" :key="index">
+        <van-swipe-item v-for="(banner, index) in homeStore.banners" :key="index">
           <div class="banner-item">
             <img v-lazy="banner.image" :alt="banner.title" class="banner-img" />
             <div class="banner-content">
@@ -43,7 +43,7 @@
       <!-- 分类导航 - Organic Shapes -->
       <van-grid :column-num="5" :border="false" class="category-grid">
         <van-grid-item
-          v-for="(category, index) in categories"
+          v-for="(category, index) in homeStore.categories"
           :key="index"
           :icon="category.icon"
           :text="category.text"
@@ -133,49 +133,21 @@
   </van-pull-refresh>
 </template>
 
-<script setup>
-import { ref } from 'vue'
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { showToast } from 'vant'
 import ProductRecommend from '@/components/ProductRecommend.vue'
+import { useHomeStore } from '@/stores/useHomeStore'
+import { getHotSaleProducts } from '@/services/productService'
+import type { Product, Brand } from '@/types'
 
-// 搜索关键词
+const homeStore = useHomeStore()
+const hotSaleProducts = ref<Product[]>([])
 const searchValue = ref('')
+const refreshing = ref(false)
 
-// 轮播图数据
-const banners = ref([
-  {
-    id: 1,
-    image: 'https://img01.yzcdn.cn/vant/apple-1.jpg',
-    title: '春季大促，全球好物低至 3 折'
-  },
-  {
-    id: 2,
-    image: 'https://img01.yzcdn.cn/vant/apple-2.jpg',
-    title: '三八女王节，尽显女性风采'
-  },
-  {
-    id: 3,
-    image: 'https://img01.yzcdn.cn/vant/apple-3.jpg',
-    title: '品质生活，从这里开始'
-  }
-])
-
-// 分类导航数据
-const categories = ref([
-  { text: '今日特惠', icon: 'fire-o' },
-  { text: '畅销热卖', icon: 'hot-o' },
-  { text: '潮流服饰', icon: 'shop-o' },
-  { text: '时尚鞋靴', icon: 'gift-o' },
-  { text: '运动户外', icon: 'bicycle' },
-  { text: '美容护肤', icon: 'smile-o' },
-  { text: '营养保健', icon: 'like-o' },
-  { text: '电子数码', icon: 'phone-o' },
-  { text: '进口家居', icon: 'home-o' },
-  { text: '母婴玩具', icon: 'baby-o' }
-])
-
-// 品牌数据
-const brands = ref([
+// 品牌数据 (暂时保留在组件内，因为通常变化不频繁且仅在此展示)
+const brands = ref<Brand[]>([
   { id: 1, name: 'BOSS', logo: 'https://img01.yzcdn.cn/vant/logo.png' },
   { id: 2, name: 'ECCO', logo: 'https://img01.yzcdn.cn/vant/logo.png' },
   { id: 3, name: 'Salomon', logo: 'https://img01.yzcdn.cn/vant/logo.png' },
@@ -188,67 +160,30 @@ const brands = ref([
   { id: 10, name: 'Hansgrohe', logo: 'https://img01.yzcdn.cn/vant/logo.png' }
 ])
 
-// 热门品牌数据
-const popularBrands = ref([
-  { id: 1, name: 'Clarks', logo: 'https://img01.yzcdn.cn/vant/cat.jpeg' },
-  { id: 2, name: 'Camper', logo: 'https://img01.yzcdn.cn/vant/cat.jpeg' },
-  { id: 3, name: 'BOSS', logo: 'https://img01.yzcdn.cn/vant/cat.jpeg' },
-  { id: 4, name: 'ECCO', logo: 'https://img01.yzcdn.cn/vant/cat.jpeg' }
-])
-
-// 热卖商品数据
-const hotSaleProducts = ref([
-  {
-    id: 'hs1',
-    title: 'Nestlé BEBA奶粉 SUPREME',
-    desc: '德国版本 2段',
-    price: '199.00',
-    tag: '热销',
-    thumb: 'https://img01.yzcdn.cn/vant/cat.jpeg'
-  },
-  {
-    id: 'hs2',
-    title: 'TAUTROPFEN 天然护肤精华液',
-    desc: '德国进口 滋润保湿',
-    price: '299.00',
-    tag: '新品',
-    thumb: 'https://img01.yzcdn.cn/vant/cat.jpeg'
-  },
-  {
-    id: 'hs3',
-    title: 'Aptamil 爱他美奶粉',
-    desc: '德国原装进口',
-    price: '258.00',
-    tag: '推荐',
-    thumb: 'https://img01.yzcdn.cn/vant/cat.jpeg'
-  },
-  {
-    id: 'hs4',
-    title: 'La Roche-Posay 理肤泉喷雾',
-    desc: '舒缓修护',
-    price: '128.00',
-    tag: '畅销',
-    thumb: 'https://img01.yzcdn.cn/vant/cat.jpeg'
+const fetchData = async () => {
+  try {
+    await homeStore.fetchHomeData()
+    hotSaleProducts.value = await getHotSaleProducts()
+  } catch (_error) {
+    showToast({ type: 'fail', message: '加载失败' })
   }
-])
+}
 
-const refreshing = ref(false)
+onMounted(async () => {
+  await fetchData()
+})
 
-const onRefresh = () => {
+const onRefresh = async () => {
   refreshing.value = true
-  setTimeout(async () => {
-    try {
-      banners.value = [
-        ...banners.value,
-        { id: Date.now(), image: 'https://img01.yzcdn.cn/vant/apple-4.jpg', title: '会员尊享日' }
-      ]
-      showToast({ type: 'success', message: '内容已更新' })
-    } catch (error) {
-      showToast({ type: 'fail', message: '网络异常' })
-    } finally {
-      refreshing.value = false
-    }
-  }, 1000)
+  searchValue.value = ''
+  try {
+    await fetchData()
+    showToast({ type: 'success', message: '已更新' })
+  } catch (_error) {
+    showToast({ type: 'fail', message: '刷新失败' })
+  } finally {
+    refreshing.value = false
+  }
 }
 </script>
 

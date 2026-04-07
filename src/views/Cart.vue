@@ -38,7 +38,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 /**
  * Cart.vue - 购物车页面组件
  *
@@ -53,7 +53,16 @@
 
 import { ref, computed } from 'vue'
 
-const cartItems = ref([
+interface CartItem {
+  id: number
+  title: string
+  desc: string
+  price: number
+  quantity: number
+  thumb: string
+}
+
+const cartItems = ref<CartItem[]>([
   {
     id: 1,
     title: 'iPhone 13 Pro',
@@ -72,7 +81,7 @@ const cartItems = ref([
   }
 ])
 
-const checkedItems = ref([])
+const checkedItems = ref<number[]>([])
 const checkAll = computed({
   get() {
     return cartItems.value.length === checkedItems.value.length

@@ -1,10 +1,14 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
+import { fileURLToPath } from 'url'
 import eslint from 'vite-plugin-eslint'
 
 import Components from 'unplugin-vue-components/vite'
 import { VantResolver } from 'unplugin-vue-components/resolvers'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 // Vite 配置文件
 export default defineConfig({
@@ -82,19 +86,28 @@ export default defineConfig({
       output: {
         manualChunks: {
           // 将 vue 相关库打包成单独的 chunk 中
-          vendor: ['vue', 'vue-router', 'vuex']
+          vendor: ['vue', 'vue-router', 'pinia']
         }
       }
     },
     // 启用 gzip 压缩
     brotliSize: true
   },
+  // 测试配置
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    include: ['src/**/*.test.{js,ts}'],
+    deps: {
+      inline: ['vant']
+    }
+  },
   // CSS 相关配置
   css: {
     preprocessorOptions: {
       scss: {
         // 全局引入 scss 变量文件
-        additionalData: `@import "@/assets/styles/variables.scss";`
+        additionalData: `@use "@/assets/styles/variables.scss" as *;`
       }
     }
   }
